@@ -1,0 +1,16 @@
+---
+- hosts: 44.206.232.84
+  become: true
+
+  vars:
+    username: "newuser"
+    password: "{{ lookup('password', '/dev/null length=15') }}"
+
+  tasks:
+    - name: Create new user
+      user:
+        name: "{{ username }}"
+        password: "{{ password | password_hash('sha512') }}"
+        groups: sudo
+        append: yes
+        state: present
