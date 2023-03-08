@@ -1,15 +1,35 @@
-- hosts: 44.206.232.84
-  become: true
-
-  vars:
-    username: "newuser"
-    password: "{{ lookup('password', '/dev/null length=15') }}"
-
+---
+- name: Install Apache Tomcat
+  hosts: 44.206.232.84
+  become: yes
+  
   tasks:
-    - name: Create new user
-      user:
-        name: "{{ username }}"
-        password: "{{ password | password_hash('sha512') }}"
-        groups: sudo
-        append: yes
+    - name: Install Java
+      apt:
+        name: default-jdk
         state: present
+        
+    - name: Download Tomcat
+      get_url:
+        url: "https://downloads.apache.org/tomcat/tomcat-9/v9.0.55/bin/apache-tomcat-9.0.55.tar.gz"
+        dest: "/tmp/apache-tomcat-9.0.55.tar.gz"
+        
+    - name: Extract Tomcat
+      unarchive:
+        src: "/tmp/apache-tomcat-9.0.55.tar.gz"
+        dest: "/opt/"
+        remote_src: yes
+        extra_opts: "--strip-components=1"
+        
+    - name: Configure Tomcat
+      template:
+        src: "tomcat-users.xml.j2"
+        dest: "/opt/apache-tomcat-9.0.55/conf/tomcat-users.xml"
+        owner: tomcat
+        group: tomcat
+        mode: "0644"
+        
+    - name: Start Tomcat
+      systemd:
+        name: tomcat
+        state: started
