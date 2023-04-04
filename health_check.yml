@@ -1,0 +1,10 @@
+---
+- name: system health check
+  hosts: all
+  gather_facts: false
+
+  roles:
+    - heaith_check
+
+
+  
