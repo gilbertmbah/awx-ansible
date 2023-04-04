@@ -1,6 +1,6 @@
 ---
 - hosts: 172.31.91.198
-  task:
+  tasks:
    - name: system health check
      gather_facts: true
      roles:
