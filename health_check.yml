@@ -1,7 +1,7 @@
 ---
 - hosts: 172.31.91.198
   name: system health check
-  gather_facts: 
+  gather_facts: false
   roles:
     - health_check
 
