@@ -1,6 +1,6 @@
 ---
 - name: Update and Upgrade Ubuntu Server
-  hosts: 172.31.95.240
+  hosts: 172.31.91.198
   become: yes
 
   tasks:
