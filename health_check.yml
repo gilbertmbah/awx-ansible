@@ -1,10 +1,10 @@
 ---
-- name: system health check
-  hosts: 172.31.91.198
-  gather_facts: true
-
-  roles:
-    - health_check
+hosts: 172.31.91.198
+task:
+  - name: system health check
+    gather_facts: true
+    roles:
+      - health_check
 
 
   
