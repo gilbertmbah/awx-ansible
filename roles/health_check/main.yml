@@ -23,4 +23,8 @@
          {{ cpu_load.stdout }}
          Memory Usage:
          {{ mem_usage.stdout }}
+  tasks:
+    - name: Hello Message
+      debug:
+        msg: "Hello World!"
         
