@@ -2,13 +2,6 @@
 - name: Scan for system updates on Ubuntu server
   hosts: 172.31.91.198
   become: true
-
-  roles:
-    - update-check
-
-  collections:
-    - community.general
-
   tasks:
     - name: Check for available updates
       apt:
