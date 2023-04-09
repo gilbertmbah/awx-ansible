@@ -1,0 +1,22 @@
+---
+- name: Scan for system updates on Ubuntu server
+  hosts: 172.31.91.198
+  become: true
+
+  roles:
+    - update-check
+
+  collections:
+    - community.general
+
+  tasks:
+    - name: Check for available updates
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        upgrade: dist
+      register: update_status
+
+    - name: Show update status
+      debug:
+        var: update_status
