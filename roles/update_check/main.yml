@@ -1,6 +1,6 @@
 ---
 - name: Scan for system updates on Ubuntu server
-  hosts: localhost
+  hosts: 172.31.91.198
   become: true
   tasks:
     - name: Check for available updates
