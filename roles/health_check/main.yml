@@ -1,5 +1,4 @@
 ---
-- hosts: 172.31.91.198 
   tasks:
    - name: check disc usage
      command: df -h
