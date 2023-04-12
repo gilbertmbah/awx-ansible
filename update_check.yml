@@ -1,6 +1,5 @@
----
-- hosts: 172.31.91.198
-  name: system update check 
-  gather_facts: false
+- name: update_check rolw
+  hosts: all
+  gather_facts: yes
   roles:
     - update_check
