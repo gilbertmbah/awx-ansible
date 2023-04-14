@@ -1,0 +1,37 @@
+---
+- name: Backup server snapshot to S3
+  hosts: your_server_hostname
+  gather_facts: no
+  vars:
+    s3_bucket: your-s3-bucket-name
+    aws_access_key: your-aws-access-key
+    aws_secret_key: your-aws-secret-key
+
+  tasks:
+    - name: Install boto3 Python module
+      pip:
+        name: boto3
+
+    - name: Take server snapshot
+      shell: |
+        mkdir -p /var/backups
+        tar czvf /var/backups/server_snapshot_{{ ansible_date_time.iso8601_basic }}.tar.gz /var/www/html
+      register: server_snapshot
+
+    - name: Upload snapshot to S3
+      run_once: yes
+      vars:
+        region: "{{ s3_bucket.split('.')[1] }}"
+        s3_client:
+          aws_access_key_id: "{{ aws_access_key }}"
+          aws_secret_access_key: "{{ aws_secret_key }}"
+          region_name: "{{ region }}"
+          endpoint_url: "https://s3.{{ region }}.amazonaws.com"
+      python:
+        boto3:
+          client: s3
+          method: put_object
+          kwargs:
+            Bucket: "{{ s3_bucket }}"
+            Key: "server_backups/{{ server_snapshot.stdout }}"
+            Body: "{{ lookup('file', '/var/backups/' + server_snapshot.stdout) }}"
