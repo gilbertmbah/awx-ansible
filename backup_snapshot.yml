@@ -1,6 +1,6 @@
 ---
 - name: Backup server snapshot to S3
-  hosts: your_server_hostname
+  hosts: all
   gather_facts: no
   vars:
     s3_bucket: your-s3-bucket-name
