@@ -1,0 +1,79 @@
+- hosts: all
+
+  become: true # sudo
+
+  tasks:
+
+  - name: Make sure we have a user group
+
+    group:
+
+      name: infra
+
+      state: present
+
+  - name: Add user accounts
+
+    user:
+
+      name: infra
+
+      groups:
+
+      - infra
+
+      state: present
+
+      createhome: yes
+
+      shell: /bin/bash
+
+      append: yes
+
+  - name: Create ssh folder
+
+    file:
+
+      path: /home/infra/.ssh
+
+      owner: infra
+
+      group: infra
+
+      mode: 0700
+
+      state: directory
+
+  - name: Set up ssh keys
+
+    copy:
+
+      dest: /home/infra/.ssh/authorized_keys
+
+      owner: infra
+
+      group: infra
+
+      mode: 0600
+
+      content: |
+
+        ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGU50UKHISnvDD9aq0fYF5y31puTj0/IYaaDpAq73UQC
+
+  - name: Set up passwordless sudo
+
+    copy:
+
+      dest: /etc/sudoers.d/infra
+
+      owner: root
+
+      group: root
+
+      mode: 0600
+
+      content: |
+
+        # Allow infra to execute any command without a password
+
+        %infra ALL=(ALL:ALL) NOPASSWD:ALL
